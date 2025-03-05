@@ -1,0 +1,44 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Спортивные товары",
+      "description": "Категория со спортивными товарами"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Автомобили",
+      "description": "Категория с автомобилями"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "Штанга",
+      "description": "Железная штанга. Вес грифа 20 кг, комплект блинов (4 штуки). Вес блина - 10 кг.",
+      "photo": "",
+      "category": 1,
+      "price": 5000,
+      "created_at": "2025-03-05T11:52:43.231Z",
+      "updated_at": "2025-03-05T11:52:43.231Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "Лада Гранта",
+      "description": "Автомобиль отечественного производства, бренд \"Лада\"",
+      "photo": "",
+      "category": 2,
+      "price": 150000,
+      "created_at": "2025-03-05T11:53:47.911Z",
+      "updated_at": "2025-03-05T11:53:47.911Z"
+    }
+  }
+]
