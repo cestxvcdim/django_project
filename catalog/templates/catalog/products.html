@@ -1,4 +1,5 @@
 {% load static %}
+{% load my_tags %}
 
 <!doctype html>
 <html lang="en">
@@ -14,22 +15,26 @@
 
 <div class="container">
     <div class="row text-center">
-        {% for ctg in object_list %}
+        {% for product in object_list %}
             <div class="col-3">
                 <div class="card mb-4 box-shadow">
                     <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">{{ ctg }}</h4>
+                        <h4 class="my-0 font-weight-normal">{{ product }}</h4>
+                        <img class="card-img-top"
+                             src="{{ product.photo | media_path }}"
+                             alt="Card image cap">
                     </div>
                     <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{ product.price }} ₽</h1>
                         <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                            {% if ctg.description %}
-                                {{ ctg.description | truncatechars:60 }}
+                            {% if product.description %}
+                                {{ product.description | truncatechars:56 }}
                             {% else %}
                                 Описание отсутствует.
-                                Ждем, пока владелец его добавит.
+                                Ждем, пока продавец его добавит.
                             {% endif %}
                         </ul>
-                        <a href="{% url 'catalog:products' ctg.pk %}" type="button" class="btn btn-lg btn-block btn-outline-primary">Перейти к товарам</a>
+                        <a href="#" type="button" class="btn btn-lg btn-block btn-outline-primary">Перейти к товарам</a>
                     </div>
                 </div>
             </div>
