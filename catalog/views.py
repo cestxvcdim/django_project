@@ -4,6 +4,8 @@ from catalog.models import Product, Category
 
 
 def home(request):
+    """Categories list"""
+
     categories = Category.objects.all()
     context = {
         'object_list': categories
@@ -20,10 +22,22 @@ def contacts(request):
     return render(request, 'catalog/contacts.html')
 
 
-def products(request, pk):
+def product_list(request, pk):
+    """Products list"""
+
     # category_item = Category.objects.get(pk=pk)
-    categories = Product.objects.filter(category_id=pk)
+    products = Product.objects.filter(category_id=pk)
     context = {
-        'object_list': categories
+        'object_list': products
     }
-    return render(request, 'catalog/products.html', context)
+    return render(request, 'catalog/product_list.html', context)
+
+
+def product_detail(request, pk):
+    """Product details"""
+
+    product_item = Product.objects.get(pk=pk)
+    context = {
+        'product': product_item
+    }
+    return render(request, 'catalog/product_detail.html', context)

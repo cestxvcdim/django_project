@@ -1,18 +1,6 @@
-{% load static %}
+{% extends 'catalog/base.html' %}
 
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>VadimStore</title>
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous">
-</head>
-<body>
-
-{% include 'catalog/includes/top.html' %}
-
-<div class="container">
+{% block content %}
     <div class="row text-center">
         {% for ctg in object_list %}
             <div class="col-3">
@@ -29,17 +17,11 @@
                                 Ждем, пока владелец его добавит.
                             {% endif %}
                         </ul>
-                        <a href="{% url 'catalog:products' ctg.pk %}" type="button" class="btn btn-lg btn-block btn-outline-primary">Перейти к товарам</a>
+                        <a href="{% url 'catalog:product_list' ctg.pk %}" type="button"
+                           class="btn btn-lg btn-block btn-outline-primary">Перейти к товарам</a>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
-
-    {% include 'catalog/includes/bottom.html' %}
-
-</div>
-
-<script src="{% static 'js/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
-</body>
-</html>
+{% endblock %}
