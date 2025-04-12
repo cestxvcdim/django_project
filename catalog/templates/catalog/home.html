@@ -1,6 +1,12 @@
 {% extends 'catalog/base.html' %}
 
 {% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-4 d-flex align-items-center justify-content-center mb-4">
+            <a href="{% url 'catalog:product_create' %}" class="btn btn-primary btn-lg btn-block">Добавить
+                новый товар</a>
+        </div>
+    </div>
     <div class="row text-center">
         {% for ctg in object_list %}
             <div class="col-3">

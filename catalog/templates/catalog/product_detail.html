@@ -1,27 +1,34 @@
 {% extends 'catalog/base.html' %}
-{% load my_tags %}
+{% load catalog_tags %}
 
 {% block content %}
-    <div class="row text-center">
-        <div class="col-3">
-            <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">{{ product }}</h4>
-                    <img class="card-img-top"
-                         src="{{ product.photo | media_path }}"
-                         alt="Card image cap">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ product.photo | media_path }}" alt="Product Image" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+                <h2 class="display-4">{{ product }}</h2>
+                <p class="lead">Цена: {{ product.price }}₽</p>
+                <p class="lead">
+                    {% if product.description %}
+                        {{ product.description }}
+                    {% else %}
+                        Описание отсутствует.
+                        Ждем, пока продавец его добавит.
+                    {% endif %}
+                </p>
+                <p class="lead">Категория: {{ product.category }}</p>
+                <p class="lead">Дата добавления: {{ product.created_at }} </p>
+
+                <div class="mt-4">
+                    <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary btn-lg btn-block">
+                        Купить
+                    </a><br>
                 </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">{{ product.price }} ₽</h1>
-                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        {% if product.description %}
-                            {{ product.description }}
-                        {% else %}
-                            Описание отсутствует.
-                            Ждем, пока продавец его добавит.
-                        {% endif %}
-                    </ul>
-                    <a href="#" type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</a>
+                <div class="mt-2">
+                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger btn-lg btn-block">Удалить</a>
+                    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning btn-lg btn-block">Изменить</a>
                 </div>
             </div>
         </div>

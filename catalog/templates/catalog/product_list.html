@@ -1,28 +1,30 @@
 {% extends 'catalog/base.html' %}
-{% load my_tags %}
+{% load catalog_tags %}
 
 {% block content %}
-    <div class="row text-center">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for product in object_list %}
-            <div class="col-3">
-                <div class="card mb-4 box-shadow">
+            <div class="col">
+                <div class="card h-100">
                     <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">{{ product }}</h4>
-                        <img class="card-img-top"
-                             src="{{ product.photo | media_path }}"
-                             alt="Card image cap">
+                        <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
                     </div>
                     <div class="card-body">
-                        <h1 class="card-title pricing-card-title">{{ product.price }} ₽</h1>
+                        <h1 class="card-title pricing-card-title">{{ product.price }}₽</h1>
                         <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                            {% if product.description %}
-                                {{ product.description | truncatechars:56 }}
-                            {% else %}
-                                Описание отсутствует.
-                                Ждем, пока продавец его добавит.
-                            {% endif %}
+                            <li><img src="{{ product.photo | media_path }}" width="300" height="225"/></li>
+                            <br>
+                            <li>
+                                {% if product.description %}
+                                    {{ product.description | truncatechars:100 }}
+                                {% else %}
+                                    Описание отсутствует.
+                                    Ждем, пока продавец его добавит.
+                                {% endif %}
+                            </li>
                         </ul>
-                        <a href="{% url 'catalog:product_detail' product.pk %}" type="button" class="btn btn-lg btn-block btn-outline-primary">Подробнее</a>
+                        <a href="{% url 'catalog:product_detail' product.pk %}"
+                           class="btn btn-lg btn-block btn-outline-primary">Подробнее</a><br>
                     </div>
                 </div>
             </div>
