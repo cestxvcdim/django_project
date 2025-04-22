@@ -13,7 +13,7 @@ urlpatterns = [
     path('products/create', views.ProductCreateView.as_view(), name='product_create'),
     path('products/<int:pk>/update', views.ProductUpdateView.as_view(), name='product_update'),
     path('products/<int:pk>/delete', views.ProductDeleteView.as_view(), name='product_delete'),
-    path('version/<int:pk>/', views.VersionDetailView.as_view(), name='version_detail'),
-    path('version/create', views.VersionCreateView.as_view(), name='version_create'),
-    path('version/<int:pk>/update', views.VersionUpdateView.as_view(), name='version_update'),
+    path('products/<int:pk>/versions', views.VersionDetailView.as_view(), name='version_detail'),
+    path('versions/create', views.VersionCreateView.as_view(), name='version_create'),
+    path('versions/<int:pk>/update', views.VersionUpdateView.as_view(), name='version_update'),
 ]

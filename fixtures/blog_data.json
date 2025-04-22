@@ -1,0 +1,28 @@
+[
+  {
+    "model": "blog.post",
+    "pk": 14,
+    "fields": {
+      "title": "Солнце светит",
+      "slug": "solntse-svetit",
+      "body": "Очень ярко ;)",
+      "image": "posts/sun_w8iXjxD.jpg",
+      "created_at": "2025-04-11T14:11:34.426Z",
+      "is_published": true,
+      "view_count": 8
+    }
+  },
+  {
+    "model": "blog.post",
+    "pk": 15,
+    "fields": {
+      "title": "Это я",
+      "slug": "eto-ya",
+      "body": "А теперь небольшое описание, но все равно тестим truncatechars, что все работает, заодно тестим update form.",
+      "image": "posts/Резюме_фото_zvEgaTX.png",
+      "created_at": "2025-04-11T14:12:11.670Z",
+      "is_published": true,
+      "view_count": 53
+    }
+  }
+]

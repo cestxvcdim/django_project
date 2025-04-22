@@ -21,10 +21,15 @@
                 <p class="lead">Категория: {{ product.category }}</p>
                 <p class="lead">Дата добавления: {{ product.created_at }} </p>
 
-                <div class="mt-4">
+                <div class="mt-2">
                     <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary btn-lg btn-block">
                         Купить
-                    </a><br>
+                    </a>
+                </div>
+                <div class="mt-2">
+                    <a href="{% url 'catalog:version_detail' product.pk %}" class="btn btn-success btn-lg btn-block">
+                        Посмотреть версию
+                    </a>
                 </div>
                 <div class="mt-2">
                     <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger btn-lg btn-block">Удалить</a>

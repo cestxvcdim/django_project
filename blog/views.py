@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 
 # Create your views here.
@@ -28,20 +29,22 @@ class PostDetailView(DetailView):
         return self.object
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
     success_url = reverse_lazy('blog:post_list')
 
     def form_valid(self, form):
         if form.is_valid():
-            new_post = form.save(commit=False)
-            new_post.slug = slugify(new_post.title)
-            new_post.save()
+            post = form.save(commit=False)
+            post.slug = slugify(post.title)
+            user = self.request.user
+            post.author = user
+            post.save()
         return super().form_valid(form)
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
 
@@ -56,6 +59,6 @@ class PostUpdateView(UpdateView):
         return reverse('blog:post_detail', args=[self.kwargs['pk']])
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = reverse_lazy('blog:post_list')

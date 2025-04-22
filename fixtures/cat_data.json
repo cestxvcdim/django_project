@@ -1,0 +1,184 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Спортивные товары",
+      "description": "Найдется все необходимое для любителей спорта - обязательно загляните."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Автомобили",
+      "description": "Большой выбор в разных ценовых категориях - как иномарки, так и отечественные бренды."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+      "name": "Бытовая техника",
+      "description": "То, что действительно важно для создания уюта в доме - от пылесоса до холодильника."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 4,
+    "fields": {
+      "name": "Детские игрушки",
+      "description": "Игрушки детства, современные игрушки - найдется все для ребенка и взрослого!"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "Штанга",
+      "description": "Железная штанга. Вес грифа 20 кг, комплект блинов (4 штуки). Вес блина - 10 кг.",
+      "photo": "products/barbell.jpg",
+      "category": 1,
+      "price": 5000,
+      "created_at": "2025-03-05T11:52:43.231Z",
+      "updated_at": "2025-03-05T11:52:43.231Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "Лада Гранта",
+      "description": "Автомобиль отечественного производства, бренд \"Лада\".",
+      "photo": "products/lada_granta.jpg",
+      "category": 2,
+      "price": 150000,
+      "created_at": "2025-03-05T11:53:47.911Z",
+      "updated_at": "2025-03-05T11:53:47.911Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "name": "Кепка",
+      "description": "",
+      "photo": "products/cap.jpg",
+      "category": 1,
+      "price": 400,
+      "created_at": "2025-03-05T12:27:31.478Z",
+      "updated_at": "2025-03-05T12:27:31.478Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+      "name": "Мерседес Бенз",
+      "description": "",
+      "photo": "products/mercedes_benz.jpg",
+      "category": 2,
+      "price": 5000000,
+      "created_at": "2025-03-05T12:27:31.478Z",
+      "updated_at": "2025-03-05T12:27:31.478Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+      "name": "Спортивная сумка",
+      "description": "",
+      "photo": "products/sport_bag.jpg",
+      "category": 1,
+      "price": 1000,
+      "created_at": "2025-03-05T12:27:31.478Z",
+      "updated_at": "2025-03-05T12:27:31.478Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 6,
+    "fields": {
+      "name": "Фен \"Dyson\"",
+      "description": "Самый желанный фен, который сводит женщин с ума.",
+      "photo": "products/hair_dryer_dyson.jpg",
+      "category": 3,
+      "price": 50000,
+      "created_at": "2025-04-07T14:18:59.672Z",
+      "updated_at": "2025-04-07T14:18:59.672Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 7,
+    "fields": {
+      "name": "Мультиварка \"BORK\"",
+      "description": "Отличное решение для тех, кто не хочет тратить много времени на готовку.",
+      "photo": "products/multicooker_bork.jpg",
+      "category": 3,
+      "price": 30000,
+      "created_at": "2025-04-07T14:28:53.779Z",
+      "updated_at": "2025-04-07T14:28:53.779Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+      "name": "Фигурка \"Оптимус Прайм\"",
+      "description": "Дети будут в восторге - и папа тоже.",
+      "photo": "products/optimus_prime.jpg",
+      "category": 4,
+      "price": 800,
+      "created_at": "2025-04-07T14:30:48.063Z",
+      "updated_at": "2025-04-07T14:30:48.063Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+      "name": "Джедайский меч",
+      "description": "",
+      "photo": "products/jedi_sword.jpg",
+      "category": 4,
+      "price": 1500,
+      "created_at": "2025-04-07T14:31:41.026Z",
+      "updated_at": "2025-04-07T14:31:41.026Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 19,
+    "fields": {
+      "name": "Хомяк",
+      "description": "Хомячело",
+      "photo": "products/toy_hamster_eIJYoXw.jpg",
+      "category": 4,
+      "price": 1000,
+      "created_at": "2025-04-12T17:04:55.098Z",
+      "updated_at": "2025-04-12T17:04:55.098Z"
+    }
+  },
+  {
+    "model": "catalog.version",
+    "pk": 1,
+    "fields": {
+      "product": 19,
+      "version_number": 5,
+      "version_title": "Самый лучший хомяк",
+      "is_actual": true
+    }
+  },
+  {
+    "model": "catalog.version",
+    "pk": 2,
+    "fields": {
+      "product": 19,
+      "version_number": 1,
+      "version_title": "Мощный",
+      "is_actual": false
+    }
+  }
+]

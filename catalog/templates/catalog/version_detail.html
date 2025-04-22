@@ -9,14 +9,7 @@
             <div class="col-md-8">
                 <div class="text-center">
                     <h2 class="mb-4">Название версии: "{{ object.version_title }}"</h2>
-                    <p class="text-muted">Номер версии: {{ object.version_number }}</p>
-                    <p class="text-muted">
-                        {% if object.is_actual %}
-                            Актуальная версия ✅
-                        {% else %}
-                            Есть версия поновее
-                        {% endif %}
-                    </p>
+                    <p class="text-muted">Актуальная версия: {{ object.version_number }}</p>
                     <div class="col-md-4 mx-auto mb-4">
                         <a href="{% url 'catalog:version_update' object.pk %}" class="btn btn-warning btn-lg btn-block">Изменить</a>
                     </div>

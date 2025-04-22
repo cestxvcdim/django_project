@@ -1,5 +1,6 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -26,13 +27,21 @@ class ProductDetailView(DetailView):
     model = Product
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
 
+    def form_valid(self, form):
+        product = form.save()
+        user = self.request.user
+        product.owner = user
+        product.save()
 
-class ProductUpdateView(UpdateView):
+        return super().form_valid(form)
+
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
 
@@ -60,7 +69,7 @@ class ProductUpdateView(UpdateView):
         return reverse('catalog:product_detail', args=[self.kwargs['pk']])
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:home')
     context_object_name = 'product'
@@ -69,17 +78,31 @@ class ProductDeleteView(DeleteView):
 class VersionDetailView(DetailView):
     model = Version
 
+    def get_object(self, queryset=None):
+        version = Version.objects.get(product=self.kwargs['pk'], is_actual=True)
+        return version
 
-class VersionCreateView(CreateView):
+
+class VersionCreateView(LoginRequiredMixin, CreateView):
     model = Version
     form_class = VersionForm
     success_url = reverse_lazy('catalog:home')
 
 
-class VersionUpdateView(UpdateView):
+class VersionUpdateView(LoginRequiredMixin, UpdateView):
     model = Version
     form_class = VersionForm
     success_url = reverse_lazy('catalog:home')
+
+    def get_object(self, queryset=None):
+        version = Version.objects.get(product=self.kwargs['pk'], is_actual=True)
+        version.is_actual = False
+        version.save()
+
+        self.object = super().get_object(queryset)
+        self.object.is_actual = True
+        self.object.save()
+        return self.object
 
 
 def contacts(request):
