@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy, reverse
 
 # Create your views here.
@@ -9,7 +9,7 @@ from blog.forms import PostForm
 from blog.models import Post
 
 
-class PostListView(ListView):
+class PostListView(LoginRequiredMixin, ListView):
     model = Post
 
     def get_queryset(self, *args, **kwargs):
@@ -18,7 +18,7 @@ class PostListView(ListView):
         return queryset
 
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin, DetailView):
     model = Post
     context_object_name = 'post'
 
@@ -29,9 +29,10 @@ class PostDetailView(DetailView):
         return self.object
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
+    permission_required = 'blog.add_post'
     success_url = reverse_lazy('blog:post_list')
 
     def form_valid(self, form):
@@ -44,9 +45,10 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
+    permission_required = 'blog.change_post'
 
     def form_valid(self, form):
         if form.is_valid():
@@ -59,6 +61,9 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         return reverse('blog:post_detail', args=[self.kwargs['pk']])
 
 
-class PostDeleteView(LoginRequiredMixin, DeleteView):
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = reverse_lazy('blog:post_list')
+
+    def test_func(self):
+        return self.request.user.is_superuser

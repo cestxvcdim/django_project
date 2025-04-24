@@ -1,11 +1,13 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from catalog.models import Product, Category, Version
 
 
@@ -14,7 +16,7 @@ class CategoryListView(ListView):
     template_name = 'catalog/home.html'
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
 
     def get_context_data(self, **kwargs):
@@ -23,13 +25,14 @@ class ProductListView(ListView):
         return context
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
 
-class ProductCreateView(LoginRequiredMixin, CreateView):
+class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
+    permission_required = 'catalog.add_product'
     success_url = reverse_lazy('catalog:home')
 
     def form_valid(self, form):
@@ -43,7 +46,6 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
-    form_class = ProductForm
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -68,14 +70,28 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('catalog:product_detail', args=[self.kwargs['pk']])
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
 
-class ProductDeleteView(LoginRequiredMixin, DeleteView):
+        if user.groups.filter(name="Moderator").exists():
+            return ProductModeratorForm
+
+        raise PermissionDenied
+
+
+class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:home')
+    permission_required = 'catalog.delete_product'
     context_object_name = 'product'
 
+    def test_func(self):
+        return self.request.user.is_superuser
 
-class VersionDetailView(DetailView):
+
+class VersionDetailView(LoginRequiredMixin, DetailView):
     model = Version
 
     def get_object(self, queryset=None):
@@ -83,15 +99,17 @@ class VersionDetailView(DetailView):
         return version
 
 
-class VersionCreateView(LoginRequiredMixin, CreateView):
+class VersionCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Version
     form_class = VersionForm
+    permission_required = 'catalog.add_version'
     success_url = reverse_lazy('catalog:home')
 
 
-class VersionUpdateView(LoginRequiredMixin, UpdateView):
+class VersionUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Version
     form_class = VersionForm
+    permission_required = 'catalog.change_version'
     success_url = reverse_lazy('catalog:home')
 
     def get_object(self, queryset=None):
@@ -105,6 +123,7 @@ class VersionUpdateView(LoginRequiredMixin, UpdateView):
         return self.object
 
 
+@login_required
 def contacts(request):
     if request.method == 'POST':
         name = request.POST.get('name')

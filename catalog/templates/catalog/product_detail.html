@@ -32,8 +32,10 @@
                     </a>
                 </div>
                 <div class="mt-2">
-                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger btn-lg btn-block">Удалить</a>
-                    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning btn-lg btn-block">Изменить</a>
+                    {% if perms.catalog.can_edit_description and perms.catalog.can_edit_category and perms.catalog.can_cancel_publishing or user == product.owner %}
+                        <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger btn-lg btn-block">Удалить</a>
+                        <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning btn-lg btn-block">Изменить</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

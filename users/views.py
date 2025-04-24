@@ -62,12 +62,14 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
 
 class UserPasswordResetView(PasswordResetView):
-    template_name = 'users/password_reset.html'
+    template_name = 'users/password_reset_form.html'
     form_class = UserPasswordResetForm
     success_url = reverse_lazy('users:password_reset_done')
 
+
     def form_valid(self, form):
         email = form.cleaned_data['email']
+        print(email)
         user = User.objects.get(email=email)
         uid = str(user.pk)
         token = user.token
@@ -76,6 +78,7 @@ class UserPasswordResetView(PasswordResetView):
             'users:password_reset_confirm',
             kwargs={'uidb64': uid, 'token': token})
         )
+        print(url)
 
         send_mail(
             subject='Сброс пароля',
@@ -83,25 +86,25 @@ class UserPasswordResetView(PasswordResetView):
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=[email]
         )
+        print('ok')
 
         return super().form_valid(form)
 
 
-class UserPasswordResetDoneView(LoginRequiredMixin, PasswordResetDoneView):
+class UserPasswordResetDoneView(PasswordResetDoneView):
     model = User
     form_class = UserRegisterForm
     template_name = 'users/password_reset_done.html'
-    success_url = reverse_lazy('users:password_reset_done')
 
 
-class UserPasswordResetConfirmView(LoginRequiredMixin, PasswordResetConfirmView):
+class UserPasswordResetConfirmView(PasswordResetConfirmView):
     model = User
     form_class = UserRegisterForm
     template_name = 'users/password_reset_confirm.html'
     success_url = reverse_lazy('users:password_reset_complete')
 
 
-class UserPasswordResetCompleteView(LoginRequiredMixin, PasswordResetCompleteView):
+class UserPasswordResetCompleteView(PasswordResetCompleteView):
     model = User
     form_class = UserRegisterForm
     template_name = 'users/password_reset_complete.html'
