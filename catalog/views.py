@@ -10,10 +10,17 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from catalog.models import Product, Category, Version
 
+from catalog.services import get_cached_category_list, get_cached_product_info
+
 
 class CategoryListView(ListView):
     model = Category
     template_name = 'catalog/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = get_cached_category_list()
+        return context
 
 
 class ProductListView(LoginRequiredMixin, ListView):
@@ -27,6 +34,14 @@ class ProductListView(LoginRequiredMixin, ListView):
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product_info = get_cached_product_info(kwargs['object'].pk)
+        context['product_name'] = product_info['name']
+        context['product_category'] = product_info['category']
+        context['product_created_at'] = product_info['created_at']
+        return context
 
 
 class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
