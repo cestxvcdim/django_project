@@ -103,7 +103,8 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     context_object_name = 'product'
 
     def test_func(self):
-        return self.request.user.is_superuser
+        user = self.request.user
+        return user.is_superuser or user == self.get_object().owner or user.groups.filter(name="Moderator").exists()
 
 
 class VersionDetailView(LoginRequiredMixin, DetailView):
