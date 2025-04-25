@@ -2,18 +2,23 @@ import secrets
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
-    PasswordResetCompleteView
+    PasswordResetCompleteView, LoginView
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView, TemplateView
 from django.core.mail import send_mail
 
 from config import settings
-from users.forms import UserRegisterForm, UserProfileForm, UserPasswordResetForm
+from users.forms import UserRegisterForm, UserProfileForm, UserPasswordResetForm, UserPasswordSetForm, UserAuthenticationForm
 from users.models import User
 
 
 # Create your views here.
+
+class UserLoginView(LoginView):
+    template_name = 'users/login.html'
+    form_class = UserAuthenticationForm
+
 
 class RegisterView(CreateView):
     model = User
@@ -63,49 +68,20 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
 class UserPasswordResetView(PasswordResetView):
     template_name = 'users/password_reset_form.html'
+    email_template_name = 'users/password_reset_email.html'
     form_class = UserPasswordResetForm
     success_url = reverse_lazy('users:password_reset_done')
 
 
-    def form_valid(self, form):
-        email = form.cleaned_data['email']
-        print(email)
-        user = User.objects.get(email=email)
-        uid = str(user.pk)
-        token = user.token
-
-        url = self.request.build_absolute_uri(reverse(
-            'users:password_reset_confirm',
-            kwargs={'uidb64': uid, 'token': token})
-        )
-        print(url)
-
-        send_mail(
-            subject='Сброс пароля',
-            message=f'Чтобы завершить сброс пароля, перейдите по ссылке: {url}',
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[email]
-        )
-        print('ok')
-
-        return super().form_valid(form)
-
-
 class UserPasswordResetDoneView(PasswordResetDoneView):
-    model = User
-    form_class = UserRegisterForm
     template_name = 'users/password_reset_done.html'
 
 
 class UserPasswordResetConfirmView(PasswordResetConfirmView):
-    model = User
-    form_class = UserRegisterForm
+    form_class = UserPasswordSetForm
     template_name = 'users/password_reset_confirm.html'
     success_url = reverse_lazy('users:password_reset_complete')
 
 
 class UserPasswordResetCompleteView(PasswordResetCompleteView):
-    model = User
-    form_class = UserRegisterForm
     template_name = 'users/password_reset_complete.html'
-    success_url = reverse_lazy('users:login')
