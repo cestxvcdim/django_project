@@ -29,10 +29,9 @@ class PostDetailView(LoginRequiredMixin, DetailView):
         return self.object
 
 
-class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
-    permission_required = 'blog.add_post'
     success_url = reverse_lazy('blog:post_list')
 
     def form_valid(self, form):
@@ -45,10 +44,9 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostForm
-    permission_required = 'blog.change_post'
 
     def form_valid(self, form):
         if form.is_valid():
@@ -60,10 +58,15 @@ class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('blog:post_detail', args=[self.kwargs['pk']])
 
+    def test_func(self):
+        user = self.request.user
+        return user.is_superuser or user == self.get_object().author
+
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = reverse_lazy('blog:post_list')
 
     def test_func(self):
-        return self.request.user.is_superuser
+        user = self.request.user
+        return user.is_superuser or user == self.get_object().author
